@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Home screen widgets (dark) -->
+    <color name="widget_background">#FF1E1F22</color>
+    <color name="widget_text_primary">#FFE3E2E6</color>
+    <color name="widget_text_secondary">#FF9AA0A6</color>
+    <color name="widget_text_disabled">#FF5F6368</color>
+    <color name="widget_track">#33FFFFFF</color>
+    <color name="widget_fill_cpu">#FF64B5F6</color>
+    <color name="widget_fill_ram">#FF66BB6A</color>
+    <color name="widget_fill_gpu">#FFFFB74D</color>
+</resources>

@@ -77,6 +77,7 @@ import com.rk.taskmanager.ProcessUiModel
 import com.rk.taskmanager.ProcessViewModel
 import com.rk.taskmanager.TaskManager
 import com.rk.taskmanager.daemon.daemon_messages
+import com.rk.taskmanager.daemon.killByPidOrPackage
 import com.rk.taskmanager.daemon.send_daemon_messages
 import com.rk.commons.getString
 import com.rk.taskmanager.settings.SettingsRoutes
@@ -190,44 +191,9 @@ fun getAppIconBitmap(context: Context, packageName: String): Bitmap? {
 
 
 suspend fun killProc(proc: ProcessViewModel.Process): Boolean {
-    var killResult = false
-
     val isApk = isAppInstalled(TaskManager.requireContext(), proc.cmdLine)
 
-
-    killResult = withContext(Dispatchers.IO) {
-        runCatching {
-            withTimeout(3000L.milliseconds) {
-                val resultDeferred = async {
-                    daemon_messages.first { message ->
-                        try {
-                            val json = JSONObject(message)
-                            json.optString("type") == "KILL_RESULT"
-                        } catch (e: Exception) {
-                            false
-                        }
-                    }.let { JSONObject(it).optBoolean("success") }
-                }
-
-                // Send kill command
-                val cmd = JSONObject().apply {
-                    if (isApk) {
-                        put("cmd", "FORCE_STOP")
-                        put("pkg", proc.cmdLine)
-                    } else {
-                        put("cmd", "KILL")
-                        put("pid", proc.pid)
-                    }
-                }
-                send_daemon_messages.emit(cmd.toString())
-
-                // Wait for result
-                resultDeferred.await()
-            }
-        }.onFailure {
-            it.printStackTrace()
-        }.getOrDefault(false)
-    }
+    val killResult = killByPidOrPackage(proc.pid, proc.cmdLine, isApk)
 
     com.rk.commons.settings.Settings.kills++
     return killResult

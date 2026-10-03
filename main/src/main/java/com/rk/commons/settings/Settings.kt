@@ -25,6 +25,12 @@ object Settings {
     var useImperialUnits by BooleanPref(key = "use_imperial_units", default = false)
     var batteryCurrentUnit by IntPref(key = "battery_current_unit", default = BatteryCurrentUnit.UNKNOWN)
 
+    // Home screen widgets
+    var widgetLive by BooleanPref(key = "widget_live", default = true)
+    var widgetProcSort by IntPref(key = "widget_proc_sort", default = 0)
+    var widgetMetricsInterval by IntPref(key = "widget_metrics_interval", default = 1000)
+    var widgetProcInterval by IntPref(key = "widget_proc_interval", default = 3000)
+
     var pinnedProcesses: Set<String>
         get() = Preference.getString("pinned_processes", "").split(",").filter { it.isNotEmpty() }.toSet()
         set(value) = Preference.setString("pinned_processes", value.joinToString(","))

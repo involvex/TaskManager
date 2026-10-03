@@ -511,15 +511,23 @@ void processCommand(const std::string &received) {
         std::string cmd = j_in.value("cmd", "");
         json j_out;
 
+        // Correlation id. Replies are matched by callers, and several commands can be in flight
+        // at once (the widget fires kills from independent taps), so the reply has to identify
+        // which request it answers instead of relying on arrival order.
+        const int reqId = j_in.value("reqId", 0);
+        auto sendKillResult = [&](bool success) {
+            j_out["type"] = "KILL_RESULT";
+            j_out["success"] = success;
+            if (reqId > 0) j_out["reqId"] = reqId;
+            send_json(j_out);
+        };
+
         if (cmd == "PING") {
             j_out["type"] = "PONG";
             send_json(j_out);
         } else if (cmd == "KILL") {
             int pid = j_in.value("pid", -1);
-            bool success = (pid > 0) && killProcess(pid);
-            j_out["type"] = "KILL_RESULT";
-            j_out["success"] = success;
-            send_json(j_out);
+            sendKillResult((pid > 0) && killProcess(pid));
         } else if (cmd == "FORCE_STOP") {
             std::string pkg = j_in.value("pkg", "");
             std::regex pkg_regex("^[a-zA-Z0-9._]+$");
@@ -528,15 +536,10 @@ void processCommand(const std::string &received) {
                 std::string scmd = "am force-stop " + pkg;
                 success = (system(scmd.c_str()) == 0);
             }
-            j_out["type"] = "KILL_RESULT";
-            j_out["success"] = success;
-            send_json(j_out);
+            sendKillResult(success);
         } else if (cmd == "KILL_GROUP") {
             int pgid = j_in.value("pgid", -1);
-            bool success = (pgid > 0) ? killProcessGroup(pgid) : false;
-            j_out["type"] = "KILL_RESULT";
-            j_out["success"] = success;
-            send_json(j_out);
+            sendKillResult((pgid > 0) ? killProcessGroup(pgid) : false);
         } else if (cmd == "STOP_SELF" || cmd == "BUSY") {
             keep_running = 0;
         } else if (cmd == "LIST_PROCESS") {

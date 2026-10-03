@@ -14,6 +14,8 @@ import com.rk.components.compose.preferences.base.PreferenceGroup
 import com.rk.components.compose.preferences.base.PreferenceLayout
 import com.rk.commons.getString
 import com.rk.commons.strings
+import com.rk.taskmanager.R
+import com.rk.taskmanager.widget.WidgetUpdateService
 
 @Composable
 fun DaemonSettings(modifier: Modifier = Modifier) {
@@ -48,6 +50,21 @@ fun DaemonSettings(modifier: Modifier = Modifier) {
                 }
 
             }
+        }
+
+        PreferenceGroup(heading = stringResource(R.string.widget_group)) {
+            SettingsToggle(
+                label = stringResource(R.string.widget_live_updates),
+                description = stringResource(R.string.widget_live_updates_desc),
+                default = Settings.widgetLive,
+                showSwitch = true,
+                sideEffect = {
+                    Settings.widgetLive = it
+                    // Starts the service when enabled, stops it when disabled, but only while a
+                    // widget is actually placed.
+                    WidgetUpdateService.sync(context)
+                }
+            )
         }
     }
 }

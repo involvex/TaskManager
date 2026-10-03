@@ -198,41 +198,12 @@ class ProcessViewModel : ViewModel() {
                     val root = JSONObject(message)
                     if (root.optString("type") == "PROCESS_LIST") {
                         val jsonArray = root.getJSONArray("processes")
-                        val newProcesses = mutableListOf<Process>()
-                        var totalThreads = 0
                         val context = TaskManager.requireContext()
                         val myPkg = context.packageName
                         val pinnedSet = Settings.pinnedProcesses
 
-                        for (i in 0 until jsonArray.length()) {
-                            val obj = jsonArray.getJSONObject(i)
-                            val cmdLine = obj.optString("cmdLine", "")
-                            if (cmdLine == myPkg) continue
-
-                            newProcesses.add(
-                                Process(
-                                    name = obj.optString("name", ""),
-                                    nice = obj.optInt("nice", 0),
-                                    pid = obj.optInt("pid", 0),
-                                    uid = obj.optInt("uid", 0),
-                                    cpuUsage = obj.optDouble("cpuUsage", 0.0).toFloat(),
-                                    parentPid = obj.optInt("parentPid", 0),
-                                    isForeground = obj.optBoolean("isForeground", false),
-                                    memoryUsageKb = obj.optLong("memoryUsageKb", 0L),
-                                    cmdLine = cmdLine,
-                                    state = obj.optString("state", ""),
-                                    threads = obj.optInt("threads", 0).also { totalThreads += it },
-                                    startTime = obj.optLong("startTime", 0L),
-                                    elapsedTime = obj.optDouble("elapsedTime", 0.0).toFloat(),
-                                    residentSetSizeKb = obj.optLong("residentSetSizeKb", 0L),
-                                    virtualMemoryKb = obj.optLong("virtualMemoryKb", 0L),
-                                    cgroup = obj.optString("cgroup", ""),
-                                    executablePath = obj.optString("executablePath", "")
-                                )
-                            )
-                        }
-
-                        _threadCount.value = totalThreads
+                        val newProcesses = ProcessListParser.parse(jsonArray, myPkg)
+                        _threadCount.value = newProcesses.sumOf { it.threads }
 
                         val uiList = newProcesses.map { proc ->
                             async(Dispatchers.IO) {

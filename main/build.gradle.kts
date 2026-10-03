@@ -87,6 +87,10 @@ dependencies {
     implementation(libs.material)
     implementation(project(":components"))
     implementation(project(":bridge"))
+
+    // Home screen widgets
+    implementation(libs.androidx.glance)
+    implementation(libs.androidx.glance.appwidget)
     
     // Compose
     implementation(platform(libs.compose.bom))

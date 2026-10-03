@@ -1,6 +1,5 @@
 package com.rk.taskmanager.daemon
 
-import com.rk.taskmanager.MainActivity
 import com.rk.taskmanager.navControllerRef
 import com.rk.taskmanager.screens.cpu.updateCpuGraph
 import com.rk.taskmanager.screens.gpu.updateGpuGraph
@@ -20,7 +19,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 private var isPingerRunner = false
 
-suspend fun CoroutineScope.graphUpdater(activity: MainActivity){
+suspend fun CoroutineScope.graphUpdater(){
     val graphMutex = Mutex()
     launch(Dispatchers.Default) {
         daemon_messages.collect { message ->

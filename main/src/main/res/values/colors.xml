@@ -8,4 +8,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="ic_taskmanager_background">#1E5DB7</color>
+
+    <!-- Home screen widgets. Night variants live in values-night/colors.xml. -->
+    <color name="widget_background">#FFF2F3F5</color>
+    <color name="widget_text_primary">#FF1A1C1E</color>
+    <color name="widget_text_secondary">#FF5F6368</color>
+    <color name="widget_text_disabled">#FF9AA0A6</color>
+    <color name="widget_track">#33000000</color>
+    <color name="widget_fill_cpu">#FF1E88E5</color>
+    <color name="widget_fill_ram">#FF43A047</color>
+    <color name="widget_fill_gpu">#FFFB8C00</color>
 </resources>

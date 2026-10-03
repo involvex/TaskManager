@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
         instance = this
 
 
-        GlobalScope.launch { graphUpdater(this@MainActivity) }
+        GlobalScope.launch { graphUpdater() }
 
 
         setContent {

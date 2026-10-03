@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  updatePeriodMillis is deliberately left unset: the floor is 30 minutes and Android 12+ ignores it
+  for most launchers anyway. Refreshes are driven by WidgetUpdateService instead.
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="180dp"
+    android:minHeight="110dp"
+    android:targetCellWidth="3"
+    android:targetCellHeight="2"
+    android:minResizeWidth="110dp"
+    android:minResizeHeight="70dp"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:previewImage="@drawable/ic_widget_preview_vitals"
+    android:description="@string/widget_vitals_desc"
+    android:initialLayout="@layout/glance_default_loading_layout" />

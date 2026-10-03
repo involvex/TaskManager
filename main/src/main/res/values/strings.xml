@@ -9,6 +9,14 @@
     <string name="daemon_not_started">Daemon failed to start</string>
     <string name="starting_daemon">Starting daemon…</string>
     <string name="apply">Apply</string>
+    <string name="widget_channel_name">Widget updates</string>
+    <string name="widget_group">Home screen widgets</string>
+    <string name="widget_channel_desc">Keeps home screen widgets up to date</string>
+    <string name="widget_notification_text">Monitoring CPU, RAM, GPU and processes</string>
+    <string name="widget_live_updates">Live widget updates</string>
+    <string name="widget_live_updates_desc">Keep a foreground service running so widgets update while the app is closed</string>
+    <string name="widget_vitals_desc">Live CPU, RAM and GPU usage</string>
+    <string name="widget_procs_desc">Top processes by RAM, CPU or name, with quick kill</string>
     <string name="cancel">Cancel</string>
     <string name="show_user_app">Show user apps</string>
     <string name="show_system_app">Show system apps</string>
